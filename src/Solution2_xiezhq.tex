@@ -216,8 +216,8 @@ C & \rightarrow & \epsilon \mid -ABc
             If $\beta \overset{*}{\Rightarrow} \epsilon$, then $\alpha$
             does not derive any string beginning with a terminal in $FOLLOW(A)$.
             Likewise, if $\alpha \overset{*}{\Rightarrow} \epsilon$, then $\beta$
-            does not derive any string beginning with a terminal in $FOLLOW(A)$.
-
+            does not derive any string beginning with a terminal in $FOLLOW(A)$.\\
+        In short, here're no 'conflicts' in the entries of the table.
 \end{enumerate}
 
 \newpage
@@ -321,10 +321,10 @@ $S$, $T$, and $U$ are nonterminals, while others are terminals.
           \multirow{2}{6em}{NON-TERMINAL}
                               & \multicolumn{7}{|c|}{Input} \\
           \cline{2-8}         & [ & ] & x & y & $\star$ & ; & \$  \\ \hline
-          S                   & $S \rightarrow T;S$ & $S \rightarrow \epsilon$ & $S \rightarrow T;S$ & $S \rightarrow T;S$ &  &  & $S \rightarrow \epsilon$  \\ \hline
-          T                   & $T \rightarrow UT'$ &  & $T \rightarrow UT'$ & $T \rightarrow UT'$ &  &  &  \\ \hline
-          T'                  &  &  &  &  & $T' \rightarrow \star T$ & $T' \rightarrow \epsilon$ &  \\ \hline
-          U                   & $U\rightarrow[S]$ &  & $U\rightarrow x$ & $U\rightarrow y$ &  &  &  \\ \hline
+          $S$                 & $S \rightarrow T;S$ & $S \rightarrow \epsilon$ & $S \rightarrow T;S$ & $S \rightarrow T;S$ &  &  & $S \rightarrow \epsilon$  \\ \hline
+          $T$                 & $T \rightarrow UT'$ &  & $T \rightarrow UT'$ & $T \rightarrow UT'$ &  &  &  \\ \hline
+          $T'$                &  &  &  &  & $T' \rightarrow \star T$ & $T' \rightarrow \epsilon$ &  \\ \hline
+          $U$                 & $U\rightarrow[S]$ &  & $U\rightarrow x$ & $U\rightarrow y$ &  &  &  \\ \hline
       \end{tabular}
       \caption{LL(1) parsing table}
     \end{table}
@@ -347,72 +347,99 @@ X & \rightarrow & \textbf{a} \mid \textbf{a} X \textbf{b}
 
 \item Construct a DFA for viable prefixes of this grammar using LR(0)
 items.
-\begin{center}\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto]
+\begin{center}\begin{tikzpicture}[shorten >=1pt, on grid,auto]
+
     \node[state] (I0) {
-        \parbox{2cm}{\begin{equation*}\begin{aligned}
-            & I_0: \\
-            & S' \rightarrow .S \\
-            & S\rightarrow .Xa \\
-            & X\rightarrow .a \\
-            & X\rightarrow .aXb \\
-        \end{aligned}\end{equation*}}
+        \parbox{2cm}{
+            \begin{align*}
+                & I_0: \\
+                & S' \rightarrow .S \\
+                & S\rightarrow .Xa \\
+                & X\rightarrow .a \\
+                & X\rightarrow .aXb
+            \end{align*}
+        }
+    };
+
+    \node[state, above right of=I0, node distance=6cm] (I1) {
+        \parbox{2cm}{
+            \begin{align*}
+                & I_1: \\
+                & S' \rightarrow S.
+            \end{align*}
+        }
+    };
+
+    \node[state, right of=I1, node distance=5cm,accepting] (acc){
+        \parbox{2cm}{
+            \begin{align*}
+                & accept
+            \end{align*}
+        }
     };
 
     \node[state, right of=I0, node distance=5cm] (I2){
-        \parbox{2cm}{\begin{equation*}\begin{aligned}
-            & I_2: \\
-            & S\rightarrow X.a \\
-        \end{aligned}\end{equation*}}
-    };
-    \node[state, above of=I2, node distance=3.5cm] (I1) {
-        \parbox{2cm}{\begin{equation*}\begin{aligned}
-            & I_1: \\
-            & S' \rightarrow S. \\
-        \end{aligned}\end{equation*}}
+        \parbox{2cm}{
+            \begin{align*}
+                & I_2: \\
+                & S\rightarrow X.a
+            \end{align*}
+        }
     };
 
-    \node[state, right of=I1, node distance=4cm,accepting] (acc){
-        \parbox{2cm}{\begin{equation*}\begin{aligned}
-            & accept \\
-        \end{aligned}\end{equation*}}
+    \node[state, right of=I2, node distance=5cm] (I4){
+        \parbox{2cm}{
+            \begin{align*}
+                & I_4: \\
+                & S\rightarrow Xa.
+            \end{align*}
+        }
     };
-    \node[state, right of=I2, node distance=4cm] (I4){
-        \parbox{2cm}{\begin{equation*}\begin{aligned}
-            & I_4: \\
-            & S\rightarrow Xa. \\
-        \end{aligned}\end{equation*}}
+
+    \node[state, below right of=I0, node distance=6cm] (I3){
+        \parbox{2cm}{
+            \begin{align*}
+                & I_3: \\
+                & X\rightarrow a. \\
+                & X\rightarrow a.Xb \\
+                & X\rightarrow .a \\
+                & X\rightarrow .aXb
+            \end{align*}
+        }
     };
-    \node[state, below of=I2, node distance=3.5cm] (I3){
-        \parbox{2cm}{\begin{equation*}\begin{aligned}
-            & I_3: \\
-            & X\rightarrow a. \\
-            & X\rightarrow a.Xb \\
-            & X\rightarrow .aXb \\
-        \end{aligned}\end{equation*}}
+
+    \node[state, right of=I3, node distance=5cm] (I5){
+        \parbox{2cm}{
+            \begin{align*}
+                & I_5: \\
+                & X\rightarrow aX.b
+            \end{align*}
+        }
     };
-    \node[state, right of=I3, node distance=4cm] (I5){
-        \parbox{2cm}{\begin{equation*}\begin{aligned}
-            & I_5: \\
-            & X\rightarrow aX.b \\
-        \end{aligned}\end{equation*}}
-    };
+
     \node[state, right of=I5, node distance=4cm] (I6){
-        \parbox{2cm}{\begin{equation*}\begin{aligned}
-            & I_6: \\
-            & X\rightarrow aXb. \\
-        \end{aligned}\end{equation*}}
+        \parbox{2cm}{
+            \begin{align*}
+                & I_6: \\
+                & X\rightarrow aXb.
+            \end{align*}
+        }
     };
+
     \path[->]
     (I0) 	edge 					node[above]{$X$} (I2)
             edge 	[bend right] 	node[below]{$a$} (I3)
             edge 	[bend left] 	node[above]{$S$} (I1)
     (I1) 	edge 				 	node[above]{$\$$} (acc)
     (I2) 	edge 					node[above]{$a$} (I4)
-    (I3) 	edge 	[loop below] 	node[below]{$a$} ()
+    (I3) 	edge 	[loop below] 	node[above]{$a$} ()
             edge 					node[below]{$X$} (I5)
     (I5) 	edge 					node[below]{$b$} (I6);
 
 \end{tikzpicture}\end{center}
+
+\newpage
+
 \item Identify a shift-reduce conflict in this grammar under the
 SLR(1) rules.\\
 \begin{table}[h]
